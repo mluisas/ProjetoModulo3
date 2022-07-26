@@ -1,3 +1,5 @@
+package models;
+
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.Year;
@@ -13,11 +15,11 @@ public class Filme {
     private final List<String> actors;
     private final Year year;
     private final LocalTime runtime;
-    private final float rating;
+    private final Double rating;
     private final Integer votes;
     private final BigDecimal revenue;
 
-    public Filme(Integer rank, String title, List<String> genre, String description, String director, List<String> actors, Year year, LocalTime runtime, float rating, Integer votes, BigDecimal revenue) {
+    public Filme(Integer rank, String title, List<String> genre, String description, String director, List<String> actors, Year year, LocalTime runtime, Double rating, Integer votes, BigDecimal revenue) {
         this.rank = rank;
         this.title = title;
         this.genre = genre;
@@ -63,7 +65,7 @@ public class Filme {
         return runtime;
     }
 
-    public float getRating() {
+    public Double getRating() {
         return rating;
     }
 
