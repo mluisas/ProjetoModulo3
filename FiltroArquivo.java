@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FiltroArquivo {
-
     public Collection<Filme> filtrarArquivosAno(Path[] paths, Year year) {
         LerArquivosCsv lerArquivosCsv = new LerArquivosCsv();
         Collection<Filme> collectionFilme = lerArquivosCsv.lerArquivos((Path[]) paths);
@@ -28,6 +27,16 @@ public class FiltroArquivo {
                     return filme.getGenre().contains("Horror");
                 })
                 .sorted(Comparator.comparing(Filme::getRating))
+                .limit(quantidade)
+                .collect(Collectors.toSet());
+    }
+
+    public Collection<Filme> filtrarArquivos(Path[] paths, Predicate predicate, Comparator comparator, int quantidade) {
+        LerArquivosCsv lerArquivosCsv = new LerArquivosCsv();
+        Collection<Filme> collectionFilme = lerArquivosCsv.lerArquivos((Path[]) paths);
+        return collectionFilme.stream()
+                .filter(predicate)
+                .sorted(comparator)
                 .limit(quantidade)
                 .collect(Collectors.toSet());
     }
