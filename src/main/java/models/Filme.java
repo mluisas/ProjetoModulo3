@@ -1,6 +1,10 @@
+package models;
+
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.Year;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,12 +16,12 @@ public class Filme {
     private final String director;
     private final List<String> actors;
     private final Year year;
-    private final LocalTime runtime;
-    private final float rating;
+    private final Duration runtime;
+    private final Double rating;
     private final Integer votes;
     private final BigDecimal revenue;
 
-    public Filme(Integer rank, String title, List<String> genre, String description, String director, List<String> actors, Year year, LocalTime runtime, float rating, Integer votes, BigDecimal revenue) {
+    public Filme(Integer rank, String title, List<String> genre, String description, String director, List<String> actors, Year year, Duration runtime, Double rating, Integer votes, BigDecimal revenue) {
         this.rank = rank;
         this.title = title;
         this.genre = genre;
@@ -59,11 +63,11 @@ public class Filme {
         return year;
     }
 
-    public LocalTime getRuntime() {
+    public Duration getRuntime() {
         return runtime;
     }
 
-    public float getRating() {
+    public Double getRating() {
         return rating;
     }
 
@@ -98,7 +102,7 @@ public class Filme {
                 ", director='" + director + '\'' +
                 ", actors=" + actors +
                 ", year=" + year +
-                ", runtime=" + runtime +
+                ", runtime=" + runtime.toMinutes() +
                 ", rating=" + rating +
                 ", votes=" + votes +
                 ", revenue=" + revenue +
