@@ -36,9 +36,9 @@ public class ManipularArquivosFilmes implements ManipularArquivos<Filme> {
                                             atores,
                                             Year.parse(camposFilme[6]),
                                             Duration.ofMinutes(Long.parseLong(camposFilme[7])),
-                                            /*Double.parseDouble(camposFilme[8])*/camposFilme[8].isEmpty() ? null: Double.parseDouble(camposFilme[8]),
+                                            camposFilme[8].isEmpty() ? null : Double.parseDouble(camposFilme[8]),
                                             Integer.parseInt(camposFilme[9]),
-                                            /*new BigDecimal(camposFilme[10]))*/camposFilme[10].isEmpty() ? null : BigDecimal.valueOf(Double.parseDouble(camposFilme[10])));
+                                            camposFilme[10].isEmpty() ? null : BigDecimal.valueOf(Double.parseDouble(camposFilme[10])));
                                 })
                                 .collect(Collectors.toSet());
                     } catch (IOException e) {

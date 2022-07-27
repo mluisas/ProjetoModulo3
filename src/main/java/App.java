@@ -4,7 +4,10 @@ import service.FiltrarFilmes;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class App {
     public static void main(String[] args) {
@@ -16,14 +19,33 @@ public class App {
                 Path.of(System.getProperty("user.dir") + "/src/main/resources/" + "movies3.csv")
         };
 
-        manipularArquivosFilmes.lerArquivos(caminhos)
-                .stream().findFirst().ifPresent(System.out::println);
+        ArrayList<Filme> listaFilmesEntrada = new ArrayList<>(manipularArquivosFilmes.lerArquivos(caminhos));
 
-        ArrayList<Filme> listaEntrada = new ArrayList<>(manipularArquivosFilmes.lerArquivos(caminhos));
-        Predicate<Filme> predicate = (filme) -> filme.getYear().getValue() == 2012;
-        Comparator<Filme> comparator = Comparator.comparing(Filme::getRating).reversed();
-        int qtde = 5;
         FiltrarFilmes filtrarFilmes = new FiltrarFilmes();
-        filtrarFilmes.filtrar(listaEntrada, predicate, comparator, qtde).forEach(System.out::println);
+        Predicate<Filme> predicateHorror = (filme) ->filme.getGenre().contains("Horror");
+        Comparator<Filme> comparatorRating = Comparator.comparing(Filme::getRating).reversed();
+        int qtdeFilmesHorror = 20;
+        List<Filme> filmesHorror = new ArrayList<>(filtrarFilmes.filtrar(listaFilmesEntrada, predicateHorror, comparatorRating, qtdeFilmesHorror));
+
+        Path caminhoFilmesHorror = Path.of(System.getProperty("user.dir") + "/src/main/resources/" + "Top20Horror.txt");
+        manipularArquivosFilmes.criarArquivo(filmesHorror, caminhoFilmesHorror);
+
+        HashSet<Integer> anosFilmes = new HashSet<>(listaFilmesEntrada.stream()
+                .map(filme -> filme.getYear().getValue())
+                .collect(Collectors.toSet()));
+
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
+        for (Integer ano : anosFilmes ) {
+            Predicate<Filme> predicate = (filme) -> filme.getYear().getValue() == ano;
+            int qtdeFilmes = 50;
+            Runnable runnable = () -> {
+                Path caminhoFilmes = Path.of(System.getProperty("user.dir") + "/src/main/resources/" + "Top50ano" + ano +".txt");
+                List<Filme> filmes = new ArrayList<>(filtrarFilmes.filtrar(listaFilmesEntrada, predicate, comparatorRating, qtdeFilmes));
+                manipularArquivosFilmes.criarArquivo(filmes, caminhoFilmes);
+            };
+            executorService.execute(runnable);
+        }
+        executorService.shutdown();
     }
 }
